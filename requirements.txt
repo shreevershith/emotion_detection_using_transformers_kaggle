@@ -1,0 +1,14 @@
+torch>=2.1.0
+transformers>=4.30.0
+datasets>=2.12.0
+scikit-learn>=1.2.0
+pandas>=1.5.0
+numpy>=1.24.0
+jupyterlab>=4.0.0
+wandb>=0.15.0
+tqdm>=4.65.0
+accelerate>=0.21.0
+bitsandbytes>=0.39.0
+peft>=0.3.0
+nbformat>=5.8.0
+evaluate>=0.4.0
