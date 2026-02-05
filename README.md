@@ -1,8 +1,9 @@
 # Emotion Detection using Transformers (Kaggle)
 
-This repository contains Jupyter notebooks experimenting with transformer models for emotion detection on Kaggle-style datasets. The notebooks train, evaluate, and (optionally) fine-tune models such as ALBERT, DistilBERT, RoBERTa, and QLoRA-based label generation pipelines.
+Jupyter notebooks and a **Hugging Face Space** for multi-label emotion detection (11 emotions: anger, anticipation, disgust, fear, joy, love, optimism, pessimism, sadness, surprise, trust) on Kaggle-style tweet data. The notebooks train and evaluate ALBERT, DistilBERT, RoBERTa, and QLoRA-based label generation (Qwen3). The live demo runs the instruction-tuned Qwen3 LoRA adapter on a **Hugging Face Space**.
 
 ## Notebooks
+
 - `albert.ipynb` — ALBERT-based experiments and evaluation.
 - `distilbert.ipynb` — DistilBERT training and inference examples.
 - `distilroberta-base.ipynb` — DistilRoBERTa experimentation.
@@ -13,48 +14,61 @@ This repository contains Jupyter notebooks experimenting with transformer models
 - `QLoRA_Qwen3_Label_Generation_InstructionTuned_Final.ipynb` — Final instruction-tuned QLoRA label-gen pipeline.
 
 ## Overview
-This repo is intended as an experiments collection for emotion classification using transformer-based models. Each notebook contains data loading, preprocessing, model training (or fine-tuning), and evaluation cells. Notebooks are designed to be run interactively in a Jupyter environment.
+
+This repo is an experiments collection for emotion classification using transformer-based models. Each notebook has data loading, preprocessing, training (or fine-tuning), and evaluation. Notebooks are meant to be run in a Jupyter environment.
 
 ## Requirements
-Recommended Python: 3.8+.
 
-Typical dependencies (install with pip):
+Python 3.8+.
 
 ```bash
-pip install torch transformers datasets scikit-learn pandas numpy jupyterlab wandb tqdm
+pip install -r requirements.txt
 ```
 
-If you prefer Conda:
+Or core deps only: `pip install torch transformers datasets scikit-learn pandas numpy jupyterlab wandb tqdm`
+
+With Conda:
 
 ```bash
 conda create -n emo-transformers python=3.10
 conda activate emo-transformers
-pip install -r requirements.txt  # if you create one
+pip install -r requirements.txt
 ```
 
 ## Data
-This repository does not include dataset files. Use your Kaggle dataset (or other emotion-labeled CSVs) and update the notebook data-loading cells to point to your local paths. Typical columns expected by the notebooks are `text` and `label`.
+
+No dataset files are included. Use [Kaggle Emotion Detection Spring 2025](https://www.kaggle.com/competitions/emotion-detection-spring-2025) (or similar) and point notebook paths to your data. Expected columns: `Tweet` and 11 binary emotion columns (anger, anticipation, disgust, fear, joy, love, optimism, pessimism, sadness, surprise, trust).
 
 ## Quickstart
-1. Open the repository folder in VS Code or JupyterLab.
-2. Install dependencies (see above).
-3. Open a notebook, update data paths, and run cells sequentially.
 
-Example to start JupyterLab:
+1. Clone the repo and install dependencies (see above).
+2. Open a notebook, set data paths, and run cells in order.
 
 ```bash
 jupyter lab
 ```
 
+## Live demo: Hugging Face Space
+
+The **Qwen3 + LoRA** emotion model is run as a Gradio app on Hugging Face Spaces.
+
+- **Deployed Space:** [shreevershith/emotionDetectionUsingQwen3](https://huggingface.co/spaces/shreevershith/emotionDetectionUsingQwen3) — try it in the browser or via the **View API** tab.
+- **Source code:** `hf_space/` in this repo (`app.py`, `requirements.txt`, `README.md`). To create your own Space, copy that folder into a new Space at [huggingface.co/new-space](https://huggingface.co/new-space) (see `hf_space/README.md`).
+
+The Space accepts short text and returns JSON: `emotions` (list) and `binary` (dict of 11 labels with 0/1).
+
 ## Usage notes
-- Notebooks are runnable end-to-end but expect you to configure dataset paths and, for large models, appropriate GPU resources.
-- For large models (e.g., `roberta-large`), use a machine with enough GPU memory or run smaller variants for experimentation.
-- QLoRA notebooks demonstrate low-rank adaptation label-generation flows and may require more advanced environment setup (bitsandbytes, peft, etc.).
+
+- Notebooks assume dataset paths and, for large models, suitable GPU resources.
+- QLoRA notebooks need bitsandbytes, peft, etc.; see notebook cells or `requirements.txt`.
 
 ## Reproducibility
-- Set random seeds in the notebooks before training cells for stable results.
-- Log hyperparameters and metrics (e.g., with `wandb`) if you want experiment tracking.
+
+- Set random seeds in the notebooks before training.
+- Log hyperparameters and metrics (e.g. with `wandb`) if you want experiment tracking.
 
 ## References
-- Hugging Face Transformers: https://huggingface.co/docs/transformers
-- Datasets library: https://huggingface.co/docs/datasets
+
+- [Hugging Face Transformers](https://huggingface.co/docs/transformers)
+- [Datasets library](https://huggingface.co/docs/datasets)
+- [Model on Hugging Face](https://huggingface.co/shreevershith/emotion-qwen3-label-gen)
