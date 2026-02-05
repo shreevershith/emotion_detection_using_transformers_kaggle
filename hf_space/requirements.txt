@@ -1,5 +1,7 @@
-torch>=2.0.0
-transformers>=4.36.0
-peft>=0.7.0
+torch>=2.1.0
+# Qwen3 support lives in transformers 4.51+; pin within 4.x
+transformers>=4.51.0,<5.0.0
+# Use the same PEFT major version family used during training
+peft==0.15.2
 accelerate>=0.25.0
 gradio>=4.0.0
