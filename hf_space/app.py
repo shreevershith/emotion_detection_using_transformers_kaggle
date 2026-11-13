@@ -84,9 +84,15 @@ def predict(text):
             temperature=0.7,
             top_p=0.8,
             top_k=20,
+            # Stop at the end of the label line so the model does not
+            # continue into an invented "Tweet: ..." few-shot example.
+            stop_strings=["\n"],
+            tokenizer=tokenizer,
         )
     new_tokens = out[0][input_len:]
-    label_part = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+    decoded = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+    # Keep only the first line as a safeguard in case generation ran past it.
+    label_part = decoded.split("\n", 1)[0].strip()
     emotions = extract_emotions(label_part)
     binary = build_binary(emotions)
     return json.dumps(
