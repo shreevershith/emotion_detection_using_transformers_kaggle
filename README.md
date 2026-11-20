@@ -1,21 +1,27 @@
-# Emotion Detection using Transformers (Kaggle)
+# Emotion Detection in Tweets (Kaggle, 1st Place)
 
-Jupyter notebooks and a **Hugging Face Space** for multi-label emotion detection (11 emotions: anger, anticipation, disgust, fear, joy, love, optimism, pessimism, sadness, surprise, trust) on Kaggle-style tweet data. The notebooks train and evaluate ALBERT, DistilBERT, RoBERTa, and QLoRA-based label generation (Qwen3). The live demo runs the instruction-tuned Qwen3 LoRA adapter on a **Hugging Face Space**.
+Multi-label emotion detection (11 emotions: anger, anticipation, disgust, fear, joy, love, optimism, pessimism, sadness, surprise, trust) on tweets. This repo holds the experiment notebooks and a **Hugging Face Space** demo from a Kaggle class competition at UT Dallas, where my submission placed **1st**.
+
+## Results
+
+- **Competition:** Emotion Detection Spring 2025 (Kaggle community competition, UT Dallas), 11-label classification with 7,724 labeled training tweets.
+- **Final result:** 1st place on the leaderboard with a score of **0.62038**.
+- **Best submission:** a QLoRA-tuned **Qwen2.5-7B** using focal loss and threshold optimization. It was trained on Kaggle and is **not included** in this repo.
+- **Runner-up approach:** a fine-tuned RoBERTa model scored 0.61984, close behind.
+- **What is in this repo:** the encoder baselines (ALBERT, DistilBERT, DistilRoBERTa, RoBERTa) and smaller Qwen3-0.6B QLoRA experiments I ran along the way, plus the demo below.
 
 ## Notebooks
 
-- `albert.ipynb` — ALBERT-based experiments and evaluation.
-- `distilbert.ipynb` — DistilBERT training and inference examples.
-- `distilroberta-base.ipynb` — DistilRoBERTa experimentation.
+- `albert.ipynb` — ALBERT experiments and evaluation.
+- `distilbert.ipynb` — DistilBERT training and inference.
+- `distilroberta-base.ipynb` — DistilRoBERTa experiments.
 - `roberta_base.ipynb` — RoBERTa-base training and evaluation.
-- `roberta-large.ipynb` — RoBERTa-large experiments.
-- `QLoRA_Qwen3_Label_Generation_BaseModel_Final.ipynb` — QLoRA label-generation flow (base model).
-- `QLoRA_Qwen3_Label_Generation_InstructModel_Final.ipynb` — QLoRA label-generation with instruction-tuned model.
-- `QLoRA_Qwen3_Label_Generation_InstructionTuned_Final.ipynb` — Final instruction-tuned QLoRA label-gen pipeline.
+- `roberta-large.ipynb` — RoBERTa-large with focal loss and augmentation of minority classes.
+- `QLoRA_Qwen3_Label_Generation_BaseModel_Final.ipynb` — QLoRA label generation with Qwen3-0.6B-Base.
+- `QLoRA_Qwen3_Label_Generation_InstructModel_Final.ipynb` — Qwen3-0.6B with focal loss and class weights.
+- `QLoRA_Qwen3_Label_Generation_InstructionTuned_Final.ipynb` — instruction-tuned Qwen3-0.6B QLoRA label-generation pipeline.
 
-## Overview
-
-This repo is an experiments collection for emotion classification using transformer-based models. Each notebook has data loading, preprocessing, training (or fine-tuning), and evaluation. Notebooks are meant to be run in a Jupyter environment.
+Several notebooks address class imbalance with class weights, focal loss, or synonym augmentation (nlpaug) of minority classes. Each notebook covers data loading, preprocessing, training, and evaluation.
 
 ## Requirements
 
@@ -37,7 +43,7 @@ pip install -r requirements.txt
 
 ## Data
 
-No dataset files are included. Use [Kaggle Emotion Detection Spring 2025](https://www.kaggle.com/competitions/emotion-detection-spring-2025) (or similar) and point notebook paths to your data. Expected columns: `Tweet` and 11 binary emotion columns (anger, anticipation, disgust, fear, joy, love, optimism, pessimism, sadness, surprise, trust).
+No dataset files are included. The data is based on the SemEval-2018 Task 1 emotion classification set (E-c), distributed through the Kaggle competition [Emotion Detection Spring 2025](https://www.kaggle.com/competitions/emotion-detection-spring-2025). Point the notebook paths to your copy. Expected columns: `Tweet` and 11 binary emotion columns.
 
 ## Quickstart
 
@@ -50,7 +56,7 @@ jupyter lab
 
 ## Live demo: Hugging Face Space
 
-The **Qwen3 + LoRA** emotion model is run as a Gradio app on Hugging Face Spaces.
+A smaller **Qwen3-0.6B + LoRA** adapter runs as a Gradio app on Hugging Face Spaces. It is a lightweight demo, not the Qwen2.5-7B model that won the competition.
 
 - **Deployed Space:** [shreevershith/emotionDetectionUsingQwen3](https://huggingface.co/spaces/shreevershith/emotionDetectionUsingQwen3) — try it in the browser or via the **View API** tab.
 - **Source code:** `hf_space/` in this repo (`app.py`, `requirements.txt`, `README.md`). To create your own Space, copy that folder into a new Space at [huggingface.co/new-space](https://huggingface.co/new-space) (see `hf_space/README.md`).
@@ -59,7 +65,7 @@ The Space accepts short text and returns JSON: `emotions` (list) and `binary` (d
 
 ## Usage notes
 
-- Notebooks assume dataset paths and, for large models, suitable GPU resources.
+- Notebooks assume dataset paths and, for larger models, a suitable GPU.
 - QLoRA notebooks need bitsandbytes, peft, etc.; see notebook cells or `requirements.txt`.
 
 ## Reproducibility
@@ -69,6 +75,7 @@ The Space accepts short text and returns JSON: `emotions` (list) and `binary` (d
 
 ## References
 
+- Mohammad, S., Bravo-Marquez, F., Salameh, M., Kiritchenko, S. (2018). *SemEval-2018 Task 1: Affect in Tweets.* Proceedings of SemEval-2018.
 - [Hugging Face Transformers](https://huggingface.co/docs/transformers)
 - [Datasets library](https://huggingface.co/docs/datasets)
-- [Model on Hugging Face](https://huggingface.co/shreevershith/emotion-qwen3-label-gen)
+- [Demo adapter on Hugging Face](https://huggingface.co/shreevershith/emotion-qwen3-label-gen)
